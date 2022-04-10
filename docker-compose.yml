@@ -1,0 +1,23 @@
+services:
+
+  api:
+    container_name: api
+    restart: on-failure
+    entrypoint: [ "sh", "/docker/api/api.sh" ]
+    build:
+      context: .
+      dockerfile: docker/api/Dockerfile
+    ports:
+      - "9999:9999"
+    depends_on:
+      - prometheus
+      - minio
+
+  sonarqube:
+    image: sonarqube
+    platform: linux/amd64
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    expose:
+      - 9000
