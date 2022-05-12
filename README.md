@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream:README.rst
 =======
 Start local
 ==================
