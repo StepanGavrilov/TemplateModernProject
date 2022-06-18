@@ -68,9 +68,9 @@ jobs:
         run: |
           git config --local user.email ${{github.event.pusher.email}}
           git config --local user.name ${{ github.actor }}
-          git add /home/runner/work/test/test/tests-badge.svg
-          git add /home/runner/work/test/test/flake8-badge.svg
-          git add /home/runner/work/test/test/coverage-badge.svg
+          git add /home/runner/work/TemplateModernProject/TemplateModernProject/tests-badge.svg
+          git add /home/runner/work/TemplateModernProject/TemplateModernProject/flake8-badge.svg
+          git add /home/runner/work/TemplateModernProject/TemplateModernProject/coverage-badge.svg
           git commit --allow-empty -m "Add artifacts"
       - name: Push badges changes
         uses: ad-m/github-push-action@master
