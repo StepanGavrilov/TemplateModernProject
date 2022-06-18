@@ -1,0 +1,2 @@
+CREATE DATABASE template_db;
+GRANT ALL PRIVILEGES ON DATABASE template_db TO postgres;

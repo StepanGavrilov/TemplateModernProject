@@ -6,5 +6,5 @@ app = FastAPI(
 
 
 @app.get("/")
-async def minio():
+async def root():
     return {"message": "Root endpoint works!"}

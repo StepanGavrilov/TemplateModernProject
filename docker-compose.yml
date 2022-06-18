@@ -1,23 +1,107 @@
+version: "3"
+networks:
+  monitoring:
+    driver: bridge
+
 services:
 
-  api:
-    container_name: api
-    restart: on-failure
-    entrypoint: [ "sh", "/docker/api/api.sh" ]
-    build:
-      context: .
-      dockerfile: docker/api/Dockerfile
-    ports:
-      - "9999:9999"
-    depends_on:
-      - prometheus
-      - minio
-
-  sonarqube:
-    image: sonarqube
-    platform: linux/amd64
-    ports:
-      - "9000:9000"
-      - "9001:9001"
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    restart: unless-stopped
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
     expose:
-      - 9000
+      - 9100
+    networks:
+      - monitoring
+
+  prometheus:
+    container_name: "prometheus_${CONTOUR}"
+    image: prom/prometheus
+    volumes:
+      - ./docker/prometheus/:/etc/prometheus/
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yaml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention=31d'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    env_file:
+      - .env
+    ports:
+      - "${PROMETHEUS_CONTAINER_PORT}:${PROMETHEUS_HOST_PORT}"
+    expose:
+      - "${PROMETHEUS_CONTAINER_EXPOSE_PORT}"
+    networks:
+      - monitoring
+
+#  sonarqube:
+#    container_name: "sonarqube_${CONTOUR}"
+#    image: sonarqube
+#    platform: linux/amd64
+#    env_file:
+#      - .env
+#    ports:
+#      - "${SONARQUBE_CONTAINER_PORT}:${SONARQUBE_HOST_PORT}"
+#    expose:
+#      - "${SONARQUBE_CONTAINER_EXPOSE_PORT}"
+#
+  grafana:
+    container_name: "grafana_${CONTOUR}"
+    image: grafana/grafana-enterprise
+    env_file:
+      - .env
+    ports:
+      - "${GRAFANA_CONTAINER_PORT}:${GRAFANA_HOST_PORT}"
+    expose:
+      - "${GRAFANA_CONTAINER_EXPOSE_PORT}"
+    networks:
+      - monitoring
+#
+#  db:
+#    container_name: "db_${CONTOUR}"
+#    image: postgres:13.3
+#    environment:
+#      POSTGRES_DB: "${POSTGRES_DB}"
+#      POSTGRES_USER: "${POSTGRES_USER}"
+#      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+#      PGDATA: "${PGDATA}"
+#    env_file:
+#      - .env
+#    volumes:
+#      - "${POSTGRES_INIT_SCRIPT}"
+#      - "${POSTGRES_LOG}"
+#      - "${POSTGRES_VOLUME}"
+#    ports:
+#      - "${POSTGRES_CONTAINER_PORT}:${POSTGRES_HOST_PORT}"
+#    healthcheck:
+#      test: [ "CMD-SHELL", "pg_isready -U postgres -d postgres" ]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+#    expose:
+#      - "${POSTGRES_CONTAINER_EXPOSE_PORT}"
+#
+#  api:
+#    container_name: "api_${CONTOUR}"
+#    restart: on-failure
+#    entrypoint: [ "sh", "/docker/api/api.sh Local" ]
+#    build:
+#      context: .
+#      dockerfile: docker/api/Dockerfile
+#    env_file:
+#      - .env
+#    ports:
+#      - "${API_CONTAINER_PORT}:${API_HOST_PORT}"
+#    depends_on:
+#      - prometheus
+#      - sonarqube
+
