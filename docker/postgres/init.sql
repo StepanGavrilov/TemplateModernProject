@@ -1,2 +1,2 @@
-CREATE DATABASE template_db;
-GRANT ALL PRIVILEGES ON DATABASE template_db TO postgres;
+CREATE DATABASE templatemodernproject;
+GRANT ALL PRIVILEGES ON DATABASE templatemodernproject TO postgres;

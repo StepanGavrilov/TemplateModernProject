@@ -1,8 +1,3 @@
-Start local
-==================
-
-    rm -rf .env && ./docker/env.sh Local >> .env && poetry run ./docker/api/api.sh
-
 Start local (docker)
 ==================
 

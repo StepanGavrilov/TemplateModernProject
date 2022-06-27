@@ -13,5 +13,11 @@ else
 fi
 
 poetry install
+
+# migrations
+poetry run alembic revision --autogenerate -m 'initial'
+poetry run alembic upgrade head
+
+echo api start on "$API_HOST":"$API_PORT"
 poetry run uvicorn asgi:app --reload --host "$API_HOST" --port "$API_PORT"
-uvicorn asgi:app --reload --host "$API_HOST" --port "$API_PORT"
+
