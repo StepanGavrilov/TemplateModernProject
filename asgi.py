@@ -1,8 +1,7 @@
-from pathlib import Path
 from fastapi import FastAPI, Request
-from custum_logging import CustomizeLogger
-
-config_path = Path("logging_config.json")
+from fastapi.middleware.cors import CORSMiddleware
+from logg.custom_logging import custom_logger  # type: ignore
+from sentry import sentry_service  # noqa: F401
 
 
 def create_app() -> FastAPI:
@@ -10,15 +9,21 @@ def create_app() -> FastAPI:
     Create app and custom logger
     """
     fast_api = FastAPI(title='CustomLogger', debug=False)
-    logger = CustomizeLogger.make_logger(config_path)
-    fast_api.logger = logger  # type: ignore
+    fast_api.logger = custom_logger  # type: ignore
     return fast_api
 
 
 app = create_app()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
+@custom_logger.catch()
 @app.get("/")
 async def root(request: Request):
-    print(request.app.logger.info("Root EndPoint."))
-    return {"message": "Root endpoint works!"}
+    return {"message": f"Root endpoint works, {request.base_url}"}

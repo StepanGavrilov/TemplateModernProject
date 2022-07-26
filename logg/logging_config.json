@@ -1,0 +1,10 @@
+{
+  "logger": {
+    "path": "/Users/stepa/Projects/TemplateProject/access.log",
+    "filename": "TemplateProject.log",
+    "level": "info",
+    "rotation": "20 days",
+    "retention": "1 months",
+    "format": "<level>{level: <8}</level> <green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> <cyan>{name}</cyan>:<cyan>{function}</cyan> - <level>{message}</level>"
+  }
+}

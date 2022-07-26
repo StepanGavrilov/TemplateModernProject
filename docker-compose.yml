@@ -5,103 +5,131 @@ networks:
 
 services:
 
-  node-exporter:
-    image: prom/node-exporter:latest
-    container_name: node-exporter
-    restart: unless-stopped
+  postgres:
+    container_name: "postgres_${CONTOUR}"
+    image: postgres:13.3
+    command: postgres -c shared_preload_libraries=pg_stat_statements -c pg_stat_statements.track=all
+    env_file:
+      - .env
     volumes:
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /:/rootfs:ro
-    command:
-      - '--path.procfs=/host/proc'
-      - '--path.rootfs=/rootfs'
-      - '--path.sysfs=/host/sys'
-      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
-    expose:
-      - 9100
+      - "${POSTGRES_INIT_SCRIPT}"
+      - "${POSTGRES_LOG}"
+      - "${PGDATA}"
+      - "${PG_CONF}"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - monitoring
+
+  api:
+    container_name: "api_${CONTOUR}"
+    restart: on-failure
+    entrypoint: [ "/bin/bash", "/docker/api/api.sh", "Development" ]
+    build:
+      context: .
+      dockerfile: docker/api/Dockerfile_api
+    env_file:
+      - .env
+    ports:
+      - "127.0.0.1:${API_HOST_PORT}:${API_PORT}"
+    depends_on:
+      - prometheus
     networks:
       - monitoring
 
   prometheus:
     container_name: "prometheus_${CONTOUR}"
     image: prom/prometheus
-    volumes:
-      - ./docker/prometheus/:/etc/prometheus/
+    restart: on-failure
+    depends_on:
+      - postgres
     command:
-      - '--config.file=/etc/prometheus/prometheus.yaml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--storage.tsdb.retention=31d'
-      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
-      - '--web.console.templates=/usr/share/prometheus/consoles'
-    env_file:
-      - .env
+      - "${PROMETHEUS_CONFIG_FILE}"
+      - "${PROMETHEUS_STORAGE}"
+      - "${PROMETHEUS_WEB_CONSOLE_LIBS}"
+      - "${PROMETHEUS_WEB_CONSOLE_TEMPLATES}"
+      - "${PROMETHEUS_WEB_ADDRESS}"
+      - "${PROMETHEUS_STORAGE_GB}"
+      - "${PROMETHEUS_STORAGE_EXPIRE}"
     ports:
-      - "${PROMETHEUS_CONTAINER_PORT}:${PROMETHEUS_HOST_PORT}"
-    expose:
-      - "${PROMETHEUS_CONTAINER_EXPOSE_PORT}"
+      - "${PROMETHEUS_HOST_PORT}:5556"
     networks:
       - monitoring
+    volumes:
+      - "${PROMETHEUS_CONF}"
+      - "${PROMETHEUS_DATA}"
 
-#  sonarqube:
-#    container_name: "sonarqube_${CONTOUR}"
-#    image: sonarqube
-#    platform: linux/amd64
-#    env_file:
-#      - .env
-#    ports:
-#      - "${SONARQUBE_CONTAINER_PORT}:${SONARQUBE_HOST_PORT}"
-#    expose:
-#      - "${SONARQUBE_CONTAINER_EXPOSE_PORT}"
-#
   grafana:
     container_name: "grafana_${CONTOUR}"
-    image: grafana/grafana-enterprise
-    env_file:
-      - .env
+    image: grafana/grafana:7.5.7
+    restart: on-failure
+    depends_on:
+      - prometheus
     ports:
-      - "${GRAFANA_CONTAINER_PORT}:${GRAFANA_HOST_PORT}"
-    expose:
-      - "${GRAFANA_CONTAINER_EXPOSE_PORT}"
+      - "${GRAFANA_HOST_PORT}:3000"
     networks:
       - monitoring
-#
-#  db:
-#    container_name: "db_${CONTOUR}"
-#    image: postgres:13.3
-#    environment:
-#      POSTGRES_DB: "${POSTGRES_DB}"
-#      POSTGRES_USER: "${POSTGRES_USER}"
-#      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
-#      PGDATA: "${PGDATA}"
-#    env_file:
-#      - .env
-#    volumes:
-#      - "${POSTGRES_INIT_SCRIPT}"
-#      - "${POSTGRES_LOG}"
-#      - "${POSTGRES_VOLUME}"
-#    ports:
-#      - "${POSTGRES_CONTAINER_PORT}:${POSTGRES_HOST_PORT}"
-#    healthcheck:
-#      test: [ "CMD-SHELL", "pg_isready -U postgres -d postgres" ]
-#      interval: 10s
-#      timeout: 5s
-#      retries: 5
-#    expose:
-#      - "${POSTGRES_CONTAINER_EXPOSE_PORT}"
-#
-#  api:
-#    container_name: "api_${CONTOUR}"
-#    restart: on-failure
-#    entrypoint: [ "sh", "/docker/api/api.sh Local" ]
-#    build:
-#      context: .
-#      dockerfile: docker/api/Dockerfile
-#    env_file:
-#      - .env
-#    ports:
-#      - "${API_CONTAINER_PORT}:${API_HOST_PORT}"
-#    depends_on:
-#      - prometheus
-#      - sonarqube
+    volumes:
+      - "${GRAFANA_DASHBOARDS}"
+      - "${GRAFANA_DATASOURCES}"
+      - "${GRAFANA_CONFIG}"
+      - "${GRAFANA_DATA_DASHBOARDS}"
 
+  node-exporter:
+    container_name: "node-exporter_${CONTOUR}"
+    image: prom/node-exporter:latest
+    restart: on-failure
+    depends_on:
+      - prometheus
+    command:
+      - "${NODE_EXPORTER_PROC}"
+      - "${NODE_EXPORTER_ROOT_FS}"
+      - "${NODE_EXPORTER_SYS_FS}"
+      - "${NODE_EXPORTER_COLLECTOR}"
+    networks:
+      - monitoring
+    volumes:
+      - "${NODE_EXPORTER_SYS_PROC_VOLUME}"
+      - "${NODE_EXPORTER_SYS_ROOT_FS_VOLUME}"
+      - "${NODE_EXPORTER_SYS_FS_VOLUME}"
+
+  postgres-exporter-pgserver94:
+    container_name: "postgres-exporter-pgserver94_${CONTOUR}"
+    image: wrouesnel/postgres_exporter:latest
+    restart: on-failure
+    depends_on:
+      - prometheus
+    command: "${POSTGRES_EXPORTER_QUERIES}"
+    networks:
+      - monitoring
+    environment:
+      - "DATA_SOURCE_NAME=${POSTGRES_DATA_SOURCE_NAME}"
+    volumes:
+      - "${POSTGRES_EXPORTER_QUERIES_VOLUME}"
+
+  redis:
+    container_name: "redis_${CONTOUR}"
+    image: redis
+    restart: on-failure
+    networks:
+      - monitoring
+
+  redis-exporter:
+    container_name: "redis-exporter_${CONTOUR}"
+    image: oliver006/redis_exporter
+    restart: on-failure
+    depends_on:
+      - prometheus
+      - redis
+    command: "${REDIS_EXPORTER_ADDR}"
+    ports:
+      - "${REDIS_HOST_PORT}:9121"
+    networks:
+      - monitoring
+
+volumes:
+  elasticsearch_data:
+    driver: local

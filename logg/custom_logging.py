@@ -2,9 +2,10 @@
 
 import logging
 import sys
+import json
+
 from pathlib import Path
 from loguru import logger
-import json
 
 
 class InterceptHandler(logging.Handler):
@@ -52,13 +53,14 @@ class CustomizeLogger:
         return logger
 
     @classmethod
-    def customize_logging(cls,
-                          filepath: Path,
-                          level: str,
-                          rotation: str,
-                          retention: str,
-                          format: str
-                          ):
+    def customize_logging(
+            cls,
+            filepath: Path,
+            level: str,
+            rotation: str,
+            retention: str,
+            format: str
+    ):
         logger.remove()
         logger.add(
             sys.stdout,
@@ -74,7 +76,8 @@ class CustomizeLogger:
             enqueue=True,
             backtrace=True,
             level=level.upper(),
-            format=format
+            format=format,
+            serialize=True
         )
         logging.basicConfig(handlers=[InterceptHandler()], level=0)
         logging.getLogger("uvicorn.access").handlers = [InterceptHandler()]
@@ -93,3 +96,14 @@ class CustomizeLogger:
         with open(config_path) as config_file:
             config = json.load(config_file)
         return config
+
+
+def create_logger():
+    config_path = Path("logg/logging_config.json")
+    if not config_path:
+        raise FileNotFoundError(f"File path: {config_path}.")
+    c_logger = CustomizeLogger.make_logger(config_path)
+    return c_logger
+
+
+custom_logger = create_logger()
