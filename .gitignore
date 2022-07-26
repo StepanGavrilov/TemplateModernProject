@@ -286,3 +286,8 @@ cython_debug/
 .coveragerc
 .flake8
 reports
+coverage-badge.svg
+flake8-badge.svg
+tests-badge.svg
+
+/docker/prometheus/data/

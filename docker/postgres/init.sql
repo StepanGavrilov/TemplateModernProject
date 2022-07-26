@@ -1,2 +1,7 @@
-CREATE DATABASE template_db;
-GRANT ALL PRIVILEGES ON DATABASE template_db TO postgres;
+CREATE
+EXTENSION pg_stat_statements;
+
+CREATE
+DATABASE templatemodernproject;
+GRANT ALL PRIVILEGES ON DATABASE
+templatemodernproject TO postgres;
