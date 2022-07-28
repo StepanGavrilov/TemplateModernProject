@@ -7,12 +7,11 @@ rm -rf .env && ./docker/env.sh "$countur" >>.env
 
 # shellcheck disable=SC2046
 if [ "$countur" = "Local" ]; then
+  # shellcheck disable=SC2039
   source .env
 else
   . /.env
 fi
-
-poetry install
 
 # migrations
 poetry run alembic revision --autogenerate -m 'initial'
