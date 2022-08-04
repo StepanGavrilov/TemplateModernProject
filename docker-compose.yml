@@ -17,8 +17,8 @@ services:
       - "${PGDATA}"
       - "${PG_CONF}"
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres -d postgres" ]
-      interval: 10s
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
       timeout: 5s
       retries: 5
     networks:
@@ -27,7 +27,7 @@ services:
   api:
     container_name: "api_${CONTOUR}"
     restart: on-failure
-    entrypoint: [ "/bin/bash", "/docker/api/api.sh", "Development" ]
+    entrypoint: [ "/bin/sh", "/docker/api/api.sh", "Development" ]
     build:
       context: .
       dockerfile: docker/api/Dockerfile_api
@@ -36,7 +36,8 @@ services:
     ports:
       - "127.0.0.1:${API_HOST_PORT}:${API_PORT}"
     depends_on:
-      - prometheus
+      postgres:
+        condition: service_healthy
     networks:
       - monitoring
 
@@ -88,13 +89,15 @@ services:
       - "${NODE_EXPORTER_PROC}"
       - "${NODE_EXPORTER_ROOT_FS}"
       - "${NODE_EXPORTER_SYS_FS}"
-      - "${NODE_EXPORTER_COLLECTOR}"
+      - "--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)"
     networks:
       - monitoring
     volumes:
       - "${NODE_EXPORTER_SYS_PROC_VOLUME}"
       - "${NODE_EXPORTER_SYS_ROOT_FS_VOLUME}"
       - "${NODE_EXPORTER_SYS_FS_VOLUME}"
+
+
 
   postgres-exporter-pgserver94:
     container_name: "postgres-exporter-pgserver94_${CONTOUR}"
@@ -124,7 +127,7 @@ services:
     depends_on:
       - prometheus
       - redis
-    command: "${REDIS_EXPORTER_ADDR}"
+    command: -redis.addr redis://redis:6379
     ports:
       - "${REDIS_HOST_PORT}:9121"
     networks:
