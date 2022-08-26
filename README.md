@@ -17,3 +17,4 @@ Stats
 <img src="coverage-badge.svg" alt="coverage">
 <img src="tests-badge.svg" alt="tests">
 <img src="flake8-badge.svg" alt="flake8">
+

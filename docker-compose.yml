@@ -36,8 +36,7 @@ services:
     ports:
       - "127.0.0.1:${API_HOST_PORT}:${API_PORT}"
     depends_on:
-      postgres:
-        condition: service_healthy
+      - postgres
     networks:
       - monitoring
 

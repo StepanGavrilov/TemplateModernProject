@@ -2,6 +2,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from logg.custom_logging import custom_logger  # type: ignore
 from sentry import sentry_service  # noqa: F401
+from account.router import user_router  # type: ignore
 
 
 def create_app() -> FastAPI:
@@ -14,6 +15,10 @@ def create_app() -> FastAPI:
 
 
 app = create_app()
+
+# routers
+app.include_router(user_router)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
