@@ -175,7 +175,7 @@ async def login(
         sub=str(account.id),  # type: ignore
         username=account.username,  # type: ignore
         expires_delta=timedelta(
-            minutes=ACCESS_TOKEN_EXPIRE_MINUTES
+            minutes=ACCESS_TOKEN_EXPIRE_MINUTES  # type: ignore
         )  # type: ignore
     )
 
