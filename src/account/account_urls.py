@@ -174,7 +174,9 @@ async def login(
     access_token: str = create_access_token(
         sub=str(account.id),  # type: ignore
         username=account.username,  # type: ignore
-        expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)  # type: ignore
+        expires_delta=timedelta(
+            minutes=ACCESS_TOKEN_EXPIRE_MINUTES
+        )  # type: ignore
     )
 
     return Response(
