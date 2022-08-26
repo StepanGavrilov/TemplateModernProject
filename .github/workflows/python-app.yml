@@ -59,8 +59,10 @@ jobs:
       # create new badges
       - name: Create badge for coverage
         run: poetry run genbadge coverage
+
       - name: Create badge for flake8
         run: poetry run genbadge flake8
+
       - name: Create badge for tests
         run: poetry run genbadge tests
 

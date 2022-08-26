@@ -30,12 +30,21 @@ wheel = "^0.37.1"
 sqlmodel = "^0.0.6"
 asyncpg = "^0.25.0"
 greenlet = "^1.1.2"
-fastapi-users = {extras = ["sqlalchemy"], version = "^10.1.1"}
+fastapi-users = {extras = ["sqlalchemy"], version = "^10.1.4"}
 elastic-apm = "^6.10.1"
 psutil = "^5.9.1"
 returns = "^0.19.0"
 sentry-sdk = "^1.8.0"
 psycopg2-binary = "^2.9.3"
+psycopg2 = "^2.9.3"
+SQLAlchemy-Utils = "^0.38.3"
+phonenumbers = "^8.12.53"
+passlib = "^1.7.4"
+email-validator = "^1.2.1"
+aioredis = "^2.0.1"
+redis = "^4.3.4"
+orjson = "^3.7.12"
+httpx = "^0.23.0"
 
 [tool.poetry.dev-dependencies]
 
