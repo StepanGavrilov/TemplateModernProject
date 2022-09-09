@@ -27,7 +27,7 @@ importlib-resources = "^5.8.0"
 zipp = "^3.8.0"
 importlib-metadata = "^4.11.4"
 wheel = "^0.37.1"
-sqlmodel = "^0.0.6"
+sqlmodel = "^0.0.8"
 asyncpg = "^0.25.0"
 greenlet = "^1.1.2"
 fastapi-users = {extras = ["sqlalchemy"], version = "^10.1.4"}
