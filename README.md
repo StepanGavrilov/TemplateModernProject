@@ -1,3 +1,11 @@
+##### [![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-black.svg)](https://sonarcloud.io/summary/new_code?id=StepanGavrilov_TemplateModernProject)
+
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=StepanGavrilov_TemplateModernProject&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=StepanGavrilov_TemplateModernProject)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=StepanGavrilov_TemplateModernProject&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=StepanGavrilov_TemplateModernProject)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=StepanGavrilov_TemplateModernProject&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=StepanGavrilov_TemplateModernProject)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=StepanGavrilov_TemplateModernProject&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=StepanGavrilov_TemplateModernProject)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=StepanGavrilov_TemplateModernProject&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=StepanGavrilov_TemplateModernProject)
+
 Start local (docker)
 ==================
 
