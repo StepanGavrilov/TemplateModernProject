@@ -43,7 +43,7 @@ passlib = "^1.7.4"
 email-validator = "^1.2.1"
 aioredis = "^2.0.1"
 redis = "^4.3.4"
-orjson = "^3.7.12"
+orjson = "^3.8.0"
 httpx = "^0.23.0"
 
 [tool.poetry.dev-dependencies]
