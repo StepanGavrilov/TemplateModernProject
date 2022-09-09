@@ -1,9 +1,10 @@
+name: SonarQube analyzer
+
 on:
   push:
     branches:
       - '!dependabot/**'
 
-name: SonarQube analyzer
 jobs:
   sonarcloud:
     runs-on: ubuntu-latest

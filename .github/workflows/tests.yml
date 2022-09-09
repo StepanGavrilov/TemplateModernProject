@@ -1,4 +1,5 @@
-name: CI
+name: Unittest and poetry dep
+
 on: push
 
 jobs:
