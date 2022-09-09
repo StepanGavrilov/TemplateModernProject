@@ -2,7 +2,7 @@ name: SonarQube analyzer
 
 on:
   push:
-    branches:
+    branches-ignore:
       - '!dependabot/**'
 
 jobs:
