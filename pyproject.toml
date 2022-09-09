@@ -34,7 +34,7 @@ fastapi-users = {extras = ["sqlalchemy"], version = "^10.1.4"}
 elastic-apm = "^6.10.1"
 psutil = "^5.9.1"
 returns = "^0.19.0"
-sentry-sdk = "^1.8.0"
+sentry-sdk = "^1.9.8"
 psycopg2-binary = "^2.9.3"
 psycopg2 = "^2.9.3"
 SQLAlchemy-Utils = "^0.38.3"
