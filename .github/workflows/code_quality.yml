@@ -7,10 +7,6 @@ on:
     branches-ignore:
       - '!dependabot/**'
 
-    branches:
-      - 'main'
-      - 'releases/*'
-
 jobs:
   qodana:
     runs-on: ubuntu-latest
