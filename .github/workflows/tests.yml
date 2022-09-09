@@ -1,0 +1,43 @@
+name: Unittest and poetry dep
+
+on:
+  push:
+    branches:
+      - 'dependabot/**'
+
+jobs:
+
+  unittest:
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [ 3.10.2 ]
+        poetry-version: [ 1.1.11 ]
+        os: [ ubuntu-18.04 ]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Run image
+        uses: abatilo/actions-poetry@v2.0.0
+        with:
+          poetry-version: ${{ matrix.poetry-version }}
+
+      - name: View poetry --help
+        run: poetry --help
+
+      - name: Install dependencies
+        run: poetry install
+
+      - name: Run flake8
+        run: poetry run flake8 .
+
+      - name: Run mypy
+        run: poetry run mypy . --config-file=mypy.ini
+
+      - name: Run tests
+        run: poetry run python -m unittest discover
