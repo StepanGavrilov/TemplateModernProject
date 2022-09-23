@@ -1134,7 +1134,7 @@ asyncpg = ["asyncpg"]
 
 [[package]]
 name = "types-requests"
-version = "2.28.9"
+version = "2.28.11"
 description = "Typing stubs for requests"
 category = "main"
 optional = false
@@ -1233,7 +1233,7 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=6)", "pytest-black (>=
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10.2"
-content-hash = "385a771b351be180ab3b260e28463ab6fffcdd31c72673fe521956b755c9241c"
+content-hash = "b76521b518d64fb8a79d4ecf334d93dc1b27d3643880541b40d962160a4adcb5"
 
 [metadata.files]
 aioredis = [
@@ -2172,8 +2172,8 @@ tortoise-orm = [
     {file = "tortoise_orm-0.17.6-py3-none-any.whl", hash = "sha256:294b94d04d18cf85cca2a93f708be720005625b5dae3af8e8190f050ddb718d2"},
 ]
 types-requests = [
-    {file = "types-requests-2.28.9.tar.gz", hash = "sha256:feaf581bd580497a47fe845d506fa3b91b484cf706ff27774e87659837de9962"},
-    {file = "types_requests-2.28.9-py3-none-any.whl", hash = "sha256:86cb66d3de2f53eac5c09adc42cf6547eefbd0c7e1210beca1ee751c35d96083"},
+    {file = "types-requests-2.28.11.tar.gz", hash = "sha256:7ee827eb8ce611b02b5117cfec5da6455365b6a575f5e3ff19f655ba603e6b4e"},
+    {file = "types_requests-2.28.11-py3-none-any.whl", hash = "sha256:af5f55e803cabcfb836dad752bd6d8a0fc8ef1cd84243061c0e27dee04ccf4fd"},
 ]
 types-urllib3 = [
     {file = "types-urllib3-1.26.23.tar.gz", hash = "sha256:b78e819f0e350221d0689a5666162e467ba3910737bafda14b5c2c85e9bb1e56"},
