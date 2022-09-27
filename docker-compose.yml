@@ -97,7 +97,6 @@ services:
       - "${NODE_EXPORTER_SYS_FS_VOLUME}"
 
 
-
   postgres-exporter-pgserver94:
     container_name: "postgres-exporter-pgserver94_${CONTOUR}"
     image: wrouesnel/postgres_exporter:latest
