@@ -28,6 +28,8 @@ from account.auth.password import (
 from fastapi import Depends, Response, status, APIRouter
 from sqlmodel.ext.asyncio.session import AsyncSession
 
+json_media_type = "application/json"
+
 account_router = APIRouter()
 
 
@@ -99,7 +101,7 @@ async def create_account(
     )
     if account_exists:
         return Response(
-            media_type="application/json",
+            media_type=json_media_type,
             status_code=status.HTTP_409_CONFLICT,
             content=orjson.dumps(
                 {
@@ -131,7 +133,7 @@ async def create_account(
     )
 
     return Response(
-        media_type="application/json",
+        media_type=json_media_type,
         status_code=status.HTTP_201_CREATED,
         content=orjson.dumps({
             "detail": {
@@ -175,12 +177,12 @@ async def login(
         sub=str(account.id),  # type: ignore
         username=account.username,  # type: ignore
         expires_delta=timedelta(
-            minutes=ACCESS_TOKEN_EXPIRE_MINUTES  # type: ignore
+            minutes=int(ACCESS_TOKEN_EXPIRE_MINUTES)  # type: ignore
         )  # type: ignore
     )
 
     return Response(
-        media_type="application/json",
+        media_type=json_media_type,
         status_code=status.HTTP_200_OK,
         content=orjson.dumps({
             "detail": {
@@ -206,13 +208,13 @@ async def update_account(
         )
     except jwt.exceptions.ExpiredSignatureError:
         return Response(
-            media_type="application/json",
+            media_type=json_media_type,
             status_code=status.HTTP_400_BAD_REQUEST,
             content=orjson.dumps({"detail": {"message": "Token expired"}})
         )
     except jwt.exceptions.InvalidSignatureError:
         return Response(
-            media_type="application/json",
+            media_type=json_media_type,
             status_code=status.HTTP_400_BAD_REQUEST,
             content=orjson.dumps({"detail": {"message": "Invalid token"}})
         )
@@ -225,7 +227,7 @@ async def update_account(
     )
     if not account:
         return Response(
-            media_type="application/json",
+            media_type=json_media_type,
             status_code=status.HTTP_404_NOT_FOUND,
             content=orjson.dumps(
                 {"detail": {"message": "Account not found."}}
@@ -239,6 +241,6 @@ async def update_account(
     )
 
     return Response(
-        media_type="application/json",
+        media_type=json_media_type,
         status_code=status.HTTP_200_OK
     )

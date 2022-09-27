@@ -55,7 +55,7 @@ jobs:
         run: poetry run coverage xml -o reports/coverage/coverage.xml
 
       - name: Create pytest response
-        run: poetry run pytest --junitxml=reports/junit/junit.xml
+        run: poetry run pytest tests/api/main.py --junitxml=reports/junit/junit.xml
 
       - name: Create flake
         run: poetry run flake8 --output-file=reports/flake8/flake8stats.txt

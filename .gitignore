@@ -292,3 +292,5 @@ tests-badge.svg
 
 /docker/prometheus/data/
 .coverage
+/delete_docker.sh
+/del.sql

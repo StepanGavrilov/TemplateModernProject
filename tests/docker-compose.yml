@@ -1,0 +1,36 @@
+version: "3"
+
+networks:
+  inner_net:
+    driver: bridge
+
+services:
+
+  inter_test_api:
+    container_name: "api_${CONTOUR}"
+    networks:
+      - inner_net
+    entrypoint: [ "/bin/sh", "docker/api/api.sh", "Testing" ]
+    build:
+      context: ../.
+      dockerfile: tests/Dockerfile
+    env_file:
+      - .env
+    depends_on:
+      - inter_test_db
+
+  inter_test_db:
+    container_name: "postgres_${CONTOUR}"
+    networks:
+      - inner_net
+    image: postgres:latest
+    volumes:
+      - ${PWD}/docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    env_file:
+      - .env
+
+  redis:
+    image: redis:latest
+    container_name: "redis_${CONTOUR}"
+    networks:
+      - inner_net

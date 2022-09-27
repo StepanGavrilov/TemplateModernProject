@@ -45,6 +45,8 @@ aioredis = "^2.0.1"
 redis = "^4.3.4"
 orjson = "^3.7.12"
 httpx = "^0.23.0"
+testcontainers = "^3.6.1"
+pytest-json-report = "^1.5.0"
 
 [tool.poetry.dev-dependencies]
 

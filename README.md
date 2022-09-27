@@ -16,6 +16,13 @@ Api start local
 
     sudo kill -9 $(lsof -t -i:9999) && ./docker/env.sh Local >> .env && ./docker/api/api.sh Local
 
+Run integration testing (testcontainers)
+==================
+
+```
+python tests/contour_up.py
+```
+
 Mirror gitlab
 ==================
 [GitLab Mirror](https://gitlab.com/GavrilovStepan01/TemplateModernProject)
