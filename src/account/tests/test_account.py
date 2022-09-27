@@ -96,7 +96,7 @@ class Account_03_TestLogin(IsolatedAsyncioTestCase):  # NOSONAR
     def test_account_login(self):
         with httpx.Client() as client:
             response = client.post(
-                f"http://{API}/account/login/",
+                f"http://{API}/account/login/",  # NOSONAR
                 content=orjson.dumps({
                     "username": USERNAME,
                     "password": PASSWORD
