@@ -28,7 +28,7 @@ class Account_01_TestCreate(IsolatedAsyncioTestCase):  # NOSONAR
 
     def test_account_creation(self):
         response = httpx.post(
-            url=f"http://{API}/account/",
+            url=f"http://{API}/account/",  # NOSONAR
             content=orjson.dumps({
                 "username": USERNAME,
                 "password": PASSWORD
@@ -66,7 +66,7 @@ class Account_02_TestCreateDuplicate(IsolatedAsyncioTestCase):  # NOSONAR
 
     def test_account_creation_username_duplicate(self):
         response = httpx.post(
-            url=f"http://{API}/account/",
+            url=f"http://{API}/account/",  # NOSONAR
             content=orjson.dumps({
                 "username": USERNAME,
                 "password": PASSWORD
@@ -127,7 +127,7 @@ class Account_04_TestUpdate(IsolatedAsyncioTestCase):  # NOSONAR
         with httpx.Client() as client:
             response = client.put(
                 headers={"Authorization": f"Bearer {JWT_AUTH}"},
-                url=f"http://{API}/account/",
+                url=f"http://{API}/account/",  # NOSONAR
                 content=orjson.dumps({
                     "job": "programmer",
                 })
@@ -144,7 +144,7 @@ class Account_05_TestDelete(IsolatedAsyncioTestCase):  # NOSONAR
         with httpx.Client() as client:
             response = client.delete(
                 headers={"Authorization": f"Bearer {JWT_AUTH}"},
-                url=f"http://{API}/account/",
+                url=f"http://{API}/account/",  # NOSONAR
             )
         self.assertEqual(
             response.status_code,
