@@ -7,7 +7,7 @@ authors = ["StepanGavrilov"]
 [tool.poetry.dependencies]
 python = "^3.10.2"
 pytest = "^7.1.2"
-mypy = "^0.971"
+mypy = "^0.982"
 pylint = "^2.14.3"
 flake8 = "^4.0.1"
 typing-extensions = "^4.2.0"
